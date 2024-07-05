@@ -1,36 +1,27 @@
-PRINT Pushing_10...
 PUSH 10
 PRINT -
 
-PRINT Storing_10...
-STORE cyka
+STORE var
 PRINT -
 
-PRINT Pushing_20...
 PUSH 20
 PRINT -
 
-PRINT Storing_20...
-STORE blyat
+STORE var2
 PRINT -
 
-PRINT Pushing_35...
 PUSH 35
 PRINT -
 
-PRINT Pushing_15...
 PUSH 15
 PRINT -
 
-PRINT Loading_10...
-LOAD cyka
+LOAD var1
 PRINT -
 
-PRINT Loading_20...
-LOAD blyat
+LOAD var2
 PRINT -
 
-PRINT Adding_10_and_20...
 ADD
 PRINT -
 
