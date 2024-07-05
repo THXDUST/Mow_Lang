@@ -7,7 +7,7 @@ For better understanding, imagine this lang as a list.
 
 _________________________________________________________________
 
-There is a problem, if you just put `PRINT`, it won't print anything, you need to put a number to print the numer at the top of the list and the strings currently don't need wuotation marks, just put them and that's it, example: <br> `PUSH 10` <br> `PRINT` <br> won't print anything, but if we do <br> `PRINT 0` <br> it will print `10`, for strings, whether or not you put the quotation marks, the `PRINT` prints as string.
+There is a problem, if you just put `PRINT`, it won't print anything, you need to put a number to print the numer at the top of the list and the strings currently don't need quotation marks, just put them and that's it, example: <br> `PUSH 10` <br> `PRINT` <br> won't print anything, but if we do <br> `PRINT 0` <br> it will print `10`, for strings, whether or not you put the quotation marks, the `PRINT` prints as string.
 
 To run any code made for this lang, open the archive with the interpreter `simplelang.exe`
 
