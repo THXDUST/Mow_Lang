@@ -166,6 +166,21 @@ while program[pc] != "HALT":
         pc += 1
     elif opcode == "PRINT.VARS":
         print_variables()
+    elif opcode == "BUGNANA":
+        print("BUGNANA")
+        print("-")
+        print("BANANAS")
+        print("ROTAT E")
+        print("banan a")
+        print("rotato faster")
+        print("banana go")
+        print("g O")
+        print("can u fEel it?")
+        print("yES")
+        print("FEEL THe SPED")
+        print("WE HAV REAHCED MXAIMUN VLELOCIPY")
+        print("are you ok?")
+        print("WHO ARE YOU TO ACCUSE M E")
 
 print("-")
 print("Program completed.")
