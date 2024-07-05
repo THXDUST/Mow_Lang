@@ -1,7 +1,13 @@
 # My Own Programming Language
 
 I was bored and made this Python interpreter.
+
+
+For better understanding, imagine this lang as a list.
+
 _________________________________________________________________
+
+There is a problem, if you just put `PRINT`, it won't print anything, you need to put a number to print the numer at the top of the list and the strings currently don't need wuotation marks, just put them and that's it, example: <br> `PUSH 10` <br> `PRINT` <br> won't print anything, but if we do <br> `PRINT 0` <br> it will print `10`, for strings, whether or not you put the quotation marks, the `PRINT` prints as string.
 
 To run any code made for this lang, open the archive with the interpreter `simplelang.exe`
 
@@ -26,10 +32,7 @@ To run any code made for this lang, open the archive with the interpreter `simpl
 | HALT         | Terminates the execution of the program                                | `HALT` stops the program                                     |
 | MOD          | Computes the modulus of two numbers and inserts the result at the top of the stack       | `MOD` should do a % b and return c, <br> `PUSH 10` <br> `PUSH 3` <br> `MOD` <br> it should return 1 |
 | EXP          | Raises one number to the power of another and inserts the result at the top of the stack | `EXP` should do a ** b and return c, <br> `PUSH 2` <br> `PUSH 3` <br> `EXP` <br> it should return 8 |
-| DUP          | Duplicates the top value of the stack                                  | `DUP` if the stack contains [5], results in [5, 5]           |
 | SWAP         | Swaps the two top values of the stack                                  | `SWAP` if the stack contains [2, 3], results in [3, 2]       |
 | STORE        | Store the top value in a variable                                      | `STORE var` it will store the top value at "var", <br> `PUSH 3` <br> `STORE var`, <br> `PUSH 1`, <br> `LOAD war` <br> it should return 3 |
 | LOAD         | Load a value from a variable to the top                                | `LOAD var` using the example above, at the `LOAD var`, it gets the value of the variable "var"                        |
 | PRINT.VARS   | Prints all of the current saved variables                              | `PRINT.VARS` prints all of the current saved variables, <br> `PUSH 1` <br> `STORE a` <br> `PUSH 5` <br> `STORE b` <br> `PRINT.VARS` <br> it should return: <br> `Variables:` <br> `a = 1` <br> `b = 5` |
-
-
