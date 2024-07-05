@@ -166,8 +166,9 @@ while program[pc] != "HALT":
         pc += 1
     elif opcode == "PRINT.VARS":
         print_variables()
-    elif opcode == "BUGNANA":
-        print("BUGNANA")
+    elif opcode == "BUGNANAS":
+        print("-")
+        print("BUGNANAS")
         print("-")
         print("BANANAS")
         print("ROTAT E")
