@@ -355,8 +355,8 @@ def Thread():
             if __CHECK_KEYWORD(None, program[pc], 2) and program[pc] != "RANDOM":
                 _CURRENT_LINE = __LINES.index(str(program[pc]) + " " + str(program[pc + 1]))
             elif program[pc] != "RANDOM":
-                print(program[pc] + ".")
-                print(__LINES)
+                #print(program[pc] + ".")
+                #print(__LINES)
                 _CURRENT_LINE = __LINES.index(str(program[pc]))
             opcode = program[pc]
             pc += 1
@@ -366,7 +366,8 @@ def Thread():
                 pc += 1
                 stack.push(number)
             elif opcode == "HELP":
-                __PRINT_ERROR(CLine, program[pc], "Unfortuantly, the FILE READ MODE does not support the HELP command.")
+                __PRINT_ERROR(CLine, __PURE_LINES[pc - 1], "Unfortuantly, the FILE READ MODE does not support the HELP command.")
+                pc += 1
             elif opcode == "POP":
                 stack.pop()
             elif opcode == "ADD":
