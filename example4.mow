@@ -1,3 +1,5 @@
+ALLOC 2
+
 --> asks for 2 numbers
 PRINT "Please enter two numbers, it will multiply those two numbers"
 READ
@@ -16,10 +18,8 @@ PRINT "-"
 PRINT "Please enter a number, it will divide the result above by the new number"
 READ
 PRINT "-"
-
 --> do a // b
 DIV
-
 --> should print the result
 PRINT "Result"
 PRINT 1
