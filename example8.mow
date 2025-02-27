@@ -1,0 +1,40 @@
+ALLOC 3
+
+PUSH 16
+PRINT 0
+
+PUSH 8
+PRINT 0
+
+--> 16, 8
+
+PRINT ""
+SWAP
+PRINT "Top value after SWAP:"
+PRINT.STACK
+
+--> 8, 16
+
+PRINT ""
+PRINT.STACK
+DUP
+PRINT.STACK
+SUB
+PRINT "Subtraction of 16 - 16 after DUP:"
+PRINT 1
+POP
+
+PRINT.STACK
+
+PUSH 10
+PUSH 9
+ROT
+
+PRINT "Stack value after ROTating the top 3 values:"
+PRINT.STACK
+POP
+PRINT "Stack value after ROTating the top 2 values:"
+ROT
+PRINT.STACK
+
+EXIT
