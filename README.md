@@ -70,5 +70,5 @@ To execute a program written in this language, either:
 | `LOAD`       | A variable name (e.g., `var`) |
 | `RANDOM`     | _(Optional)_ An integer range (`nothing` or `50` or `10 50`) |
 | `ALLOC`      | An integer defining memory size (e.g., `5`) |
-| `TIME`       | `UTC` or `LOCAL` to define the timezone. Additional options: `FULL`, `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`, `MICROSECOND` |
+| `TIME`       | `UTC` or `LOCAL` (mandatory to have either UTC or LOCAL) to define the timezone. Additional options: `FULL`, `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`, `MICROSECOND` |
 | `WAIT`       | An integer or float defining the delay in seconds (e.g., `5` or `1.7`) |
