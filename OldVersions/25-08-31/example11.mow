@@ -1,0 +1,37 @@
+STACK.ALLOC 4
+
+--> Pushes 2 strings into memory
+
+STACK.PUSH str "HELLO WORLD 1"
+STACK.PUSH str "HELLO WORLD 2"
+
+--> Stores the 2nd string
+STORE str a STACK.POP
+
+
+--> Pushes 2 more strings into memory
+STACK.PUSH str "HELLO WORLD 3"
+STACK.PUSH str "HELLO WORLD 4"
+
+STORE str b STACK.POP
+
+
+--> Pushes 1 string and 1 integer into memory
+STACK.PUSH str "HELLO WORLD 5"
+STACK.PUSH int 102121
+
+--> Prints the memory
+STACK.PRINT
+
+--> Clear the memory
+STACK.CLEAR
+
+--> Waits 1.5 seconds
+TIME.SLEEP 1.5
+
+--> Prints the 2 stored variables
+PRINTL LOAD a
+PRINTL LOAD b
+
+--> Exits the program
+EXIT

@@ -1,0 +1,26 @@
+CLASS Person {
+    STR name;
+    INT age;
+    
+    FUNCTION VOID sayHello() {
+        PRINTL("Hello, my name is " + this.name);
+    }
+    
+    FUNCTION VOID setAge(newAge: INT) {
+        this.age = newAge;
+    }
+
+    FUNCTION VOID setName(newName: STR) {
+        this.name = newName;
+    }
+}
+
+Person john;
+
+john.setName("Johnn");
+john.sayHello();
+john.setAge(31);
+
+PRINTL(john);
+
+//EXIT(10);

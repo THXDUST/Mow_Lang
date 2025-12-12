@@ -1,0 +1,38 @@
+STACK.ALLOC 3
+
+--> Condition doesn't match
+IF (EQ 2, 1)
+	STACK.PUSH int 1
+    STACK.PRINT
+
+	--> Condition matches
+	IF (EQ 1, 1)
+		STACK.PUSH int 3
+        STACK.PRINT
+		--> Closing inner IF
+	ENDIF
+
+ELSE
+	STACK.PUSH int 2
+    STACK.PRINT
+
+	--> Condition matches
+	IF (EQ 2, 2)
+		STACK.PUSH int 4
+        STACK.PRINT
+
+		--> Condition doesn't match
+		IF (EQ 3, 5)
+			STACK.PUSH int 6
+			--> Closing all remaining IFs
+        ELSE
+            STACK.PUSH int 8
+		ENDIF
+	ENDIF
+ENDIF
+
+
+STACK.PRINT
+--> Should print "[2, 4, 8]"
+
+EXIT

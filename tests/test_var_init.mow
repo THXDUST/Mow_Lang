@@ -1,0 +1,3 @@
+INT x = 5;
+PRINTL("Initial x");
+PRINTL(x);

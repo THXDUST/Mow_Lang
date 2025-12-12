@@ -1,0 +1,26 @@
+STACK.ALLOC 3
+
+PRINTL "Get the full time."
+STACK.PUSH str TIME.NOW GLOBAL %H:%M:%S.%f %m-%d-%Y
+
+STACK.PRINT
+STACK.CLEAR
+
+--> Insert hour, minute and second to the stack
+STACK.PUSH str TIME.NOW GLOBAL %H %M %S
+STACK.PRINT
+
+--> Prints the time since the program started and pushes the result to the stack
+STACK.PUSH str TIME.SINCE
+
+--> Waits 1 second
+TIME.SLEEP 1
+
+STACK.PUSH str TIME.SINCE
+
+STACK.PRINT
+
+--> Just cleaning before leaving...
+STACK.DESTROY
+
+EXIT

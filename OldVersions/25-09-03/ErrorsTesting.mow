@@ -1,0 +1,17 @@
+#DEFINE NO_WARNS True
+
+STACK.ALLOC 3
+
+STORE list MyVar ["lista", "muito", "daora", 1111]
+STORE dict MyVar2 {"dict": "muito", "daora": 1111}
+STORE str MyVar3 "Hello Blud"
+STORE char MyVar4 "j"
+
+PRINTL MyVar[0]
+PRINTL LOAD MyVar[2]
+PRINTL MyVar3
+PRINTL MyVar3[2:]
+
+
+
+EXIT

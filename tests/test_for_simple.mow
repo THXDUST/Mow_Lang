@@ -1,0 +1,5 @@
+PRINTL("Test 1: Simple FOR loop");
+FOR (INT i=0; i < 3; i = i + 1) {
+    PRINTL(i);
+}
+PRINTL("Done");

@@ -1,0 +1,56 @@
+STACK.ALLOC 2
+
+PRINTL "Pushing 10..."
+STACK.PUSH int 10
+
+PRINTL "-"
+
+PRINTL "Storing 10..."
+
+STORE int a STACK.POP
+
+PRINTL "-"
+STACK.CLEAR
+
+PRINTL "Pushing 20..."
+STACK.PUSH int 20
+PRINTL "-"
+
+PRINTL "Storing 20..."
+STORE int b STACK.POP
+
+PRINTL "-"
+STACK.CLEAR
+
+PRINTL "Pushing 35..."
+STACK.PUSH int 35
+
+PRINTL "-"
+
+PRINTL "Pushing 15..."
+STACK.PUSH int 15
+
+PRINTL "-"
+STACK.CLEAR
+
+PRINTL "Loading 10..."
+STACK.PUSH int LOAD a
+PRINTL "-"
+
+PRINTL "Loading 20..."
+STACK.PUSH int LOAD b
+PRINTL "-"
+
+PRINTL "Adding 10 and 20..."
+STACK.PUSH float ADD STACK.POP, STACK.POP
+PRINTL "-"
+
+PRINTL "Result:"
+PRINTL STACK.TOP
+--> should print 30
+
+PRINTL "-"
+STACK.CLEAR
+
+PRINTL.VARS
+EXIT

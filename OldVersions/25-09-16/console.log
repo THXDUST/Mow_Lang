@@ -1,0 +1,1014 @@
+2260
+__NAME__: __main__
+__PROGRAM_FILEPATH__:
+__VARIABLES__:     local:         l: <__main__.Var object at 0x000002320DA44B80>
+    math:         a: <__main__.Var object at 0x000002320DA479A0>
+__FILES__: [
+]
+__DEBUG__: False
+__LABELS__: __FUNCTIONS__:     m:         EXP: |math: 2| EXP(a; b)
+        MAX: |math: 30| MAX(a; b)
+        MIN: |math: 38| MIN(a; b)
+        NEG: |math: 46| NEG(a)
+__FILE_LINES__:     local: [
+    ]
+__STACK__: None
+__DEFAULT_READ_TEXT__:
+__PLATFORM__: win32
+__IGNORE_WARNS__: False
+__MIN_VER__: 0.0.1
+__OS_NAME__: nt
+__STARTING_POINT__: ErrorsTesting.mow
+---------
+2262
+__NAME__: __main__
+__PROGRAM_FILEPATH__: ErrorsTesting.mow
+__DEBUG__: False
+__FILES__: [
+    ErrorsTesting.mow
+]
+__LABELS__: __VARIABLES__:     local:         l: <__main__.Var object at 0x000002320DA44B80>
+    math:         a: <__main__.Var object at 0x000002320DA479A0>
+__FUNCTIONS__:     m:         EXP: |math: 2| EXP(a; b)
+        MAX: |math: 30| MAX(a; b)
+        MIN: |math: 38| MIN(a; b)
+        NEG: |math: 46| NEG(a)
+__FILE_LINES__:     local: [
+        --> #DEFINE NO_WARNS True
+
+
+
+        IMPORT math AS m
+
+
+
+        --> PRINTL "logic"
+
+
+
+
+
+        STORE int l -10
+
+
+
+        --> LABEL loop
+
+        --> PRINT l
+
+        --> PRINT ": "
+
+        --> PRINT m.EXP(4; l)
+
+        --> PRINTL.VARS
+
+        --> PRINT ": MIN: "
+
+        PRINT m.MIN(4; l)
+
+        --> PRINT ", MAX: "
+
+        --> PRINTL m.MAX(4; l)
+
+        --> STORE int l ADD l, 1
+
+
+
+        --> PRINTL "-----------------------------"
+
+        --> PRINTL m.NEG(20)
+
+        --> PRINTL "-----------------------------"
+
+
+
+
+
+
+
+        --> EXIT
+
+
+
+        STORE int a 1
+
+
+
+        PRINTL 1+a
+
+
+
+        EXIT
+    ]
+    math: [
+        FUNCTION EXP a b
+
+            IF (EQ b, 0)
+
+                RETURN int 1
+
+            ENDIF
+
+
+
+            IF (EQ b, 1)
+
+                RETURN float a
+
+            ENDIF
+
+
+
+            IF (EQ b, -1)
+
+                RETURN float 1/a
+
+            ENDIF
+
+
+
+            IF (LT b, 0)
+
+                STORE float b b+1
+
+            ELSE
+
+                STORE float b b-1
+
+            ENDIF
+
+
+
+            STORE float matExp EXP(a; b)
+
+
+
+            IF (GT b, 0)
+
+                RETURN float a*matExp
+
+            ELSE
+
+                RETURN float matExp/a
+
+            ENDIF
+
+        END EXP
+
+
+
+        FUNCTION MAX a b
+
+            IF (GT a, b)
+
+                RETURN float a
+
+            ELSE
+
+                RETURN float b
+
+            ENDIF
+
+        END MAX
+
+
+
+        FUNCTION MIN a b
+
+            IF (GT a, b)
+
+                RETURN float b
+
+            ELSE
+
+                RETURN float a
+
+            ENDIF
+
+        END MIN
+
+
+
+        FUNCTION NEG a
+
+            RETURN float a*-1
+
+        END NEG
+
+
+
+        EXPORT func EXP, MAX, MIN, NEG
+    ]
+__STACK__: None
+__IGNORE_WARNS__: False
+__DEFAULT_READ_TEXT__:
+__MIN_VER__: 0.0.1
+__OS_NAME__: nt
+__PLATFORM__: win32
+__STARTING_POINT__: ErrorsTesting.mow
+---
+2260
+__NAME__: __main__
+__PROGRAM_FILEPATH__:
+__VARIABLES__:     local:         l: <__main__.Var object at 0x000002320DA44B80>
+    math:         a: <__main__.Var object at 0x000002320DA479A0>
+        b: <__main__.Var object at 0x000002320DA47A00>
+__FILES__: [
+]
+__DEBUG__: False
+__LABELS__: __FUNCTIONS__:     m:         EXP: |math: 2| EXP(a; b)
+        MAX: |math: 30| MAX(a; b)
+        MIN: |math: 38| MIN(a; b)
+        NEG: |math: 46| NEG(a)
+__FILE_LINES__:     local: [
+    ]
+__STACK__: None
+__DEFAULT_READ_TEXT__:
+__PLATFORM__: win32
+__IGNORE_WARNS__: False
+__MIN_VER__: 0.0.1
+__OS_NAME__: nt
+__STARTING_POINT__: ErrorsTesting.mow
+---------
+2262
+__NAME__: __main__
+__PROGRAM_FILEPATH__: ErrorsTesting.mow
+__DEBUG__: False
+__FILES__: [
+    ErrorsTesting.mow
+]
+__LABELS__: __VARIABLES__:     local:         l: <__main__.Var object at 0x000002320DA44B80>
+    math:         a: <__main__.Var object at 0x000002320DA479A0>
+        b: <__main__.Var object at 0x000002320DA47A00>
+__FUNCTIONS__:     m:         EXP: |math: 2| EXP(a; b)
+        MAX: |math: 30| MAX(a; b)
+        MIN: |math: 38| MIN(a; b)
+        NEG: |math: 46| NEG(a)
+__FILE_LINES__:     local: [
+        --> #DEFINE NO_WARNS True
+
+
+
+        IMPORT math AS m
+
+
+
+        --> PRINTL "logic"
+
+
+
+
+
+        STORE int l -10
+
+
+
+        --> LABEL loop
+
+        --> PRINT l
+
+        --> PRINT ": "
+
+        --> PRINT m.EXP(4; l)
+
+        --> PRINTL.VARS
+
+        --> PRINT ": MIN: "
+
+        PRINT m.MIN(4; l)
+
+        --> PRINT ", MAX: "
+
+        --> PRINTL m.MAX(4; l)
+
+        --> STORE int l ADD l, 1
+
+
+
+        --> PRINTL "-----------------------------"
+
+        --> PRINTL m.NEG(20)
+
+        --> PRINTL "-----------------------------"
+
+
+
+
+
+
+
+        --> EXIT
+
+
+
+        STORE int a 1
+
+
+
+        PRINTL 1+a
+
+
+
+        EXIT
+    ]
+    math: [
+        FUNCTION EXP a b
+
+            IF (EQ b, 0)
+
+                RETURN int 1
+
+            ENDIF
+
+
+
+            IF (EQ b, 1)
+
+                RETURN float a
+
+            ENDIF
+
+
+
+            IF (EQ b, -1)
+
+                RETURN float 1/a
+
+            ENDIF
+
+
+
+            IF (LT b, 0)
+
+                STORE float b b+1
+
+            ELSE
+
+                STORE float b b-1
+
+            ENDIF
+
+
+
+            STORE float matExp EXP(a; b)
+
+
+
+            IF (GT b, 0)
+
+                RETURN float a*matExp
+
+            ELSE
+
+                RETURN float matExp/a
+
+            ENDIF
+
+        END EXP
+
+
+
+        FUNCTION MAX a b
+
+            IF (GT a, b)
+
+                RETURN float a
+
+            ELSE
+
+                RETURN float b
+
+            ENDIF
+
+        END MAX
+
+
+
+        FUNCTION MIN a b
+
+            IF (GT a, b)
+
+                RETURN float b
+
+            ELSE
+
+                RETURN float a
+
+            ENDIF
+
+        END MIN
+
+
+
+        FUNCTION NEG a
+
+            RETURN float a*-1
+
+        END NEG
+
+
+
+        EXPORT func EXP, MAX, MIN, NEG
+    ]
+__STACK__: None
+__IGNORE_WARNS__: False
+__DEFAULT_READ_TEXT__:
+__MIN_VER__: 0.0.1
+__OS_NAME__: nt
+__PLATFORM__: win32
+__STARTING_POINT__: ErrorsTesting.mow
+---
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 8
+Running -10 in local, line: 8
+Running -10 in local, line: 8
+Running PRINT m.MIN(4; l) in local, line: 16
+Running m.MIN(4; l) in local, line: 16
+Running (4; l) in local, line: 16
+Running (4; l) in math, line: 16
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running (4; l) in math, line: 38
+Running (4; l) in math, line: 38
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running (4; l) in local, line: 7
+Running (4; l) in math, line: 7
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running (4; l) in math, line: 38
+Running (4; l) in math, line: 38
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running (4; l in local, line: 7
+Running (4; l in math, line: 7
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running (4; l in math, line: 38
+Running (4; l in math, line: 38
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running (4; l in local, line: 7
+Running (4; l in math, line: 7
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running (4; l in math, line: 38
+Running (4; l in math, line: 38
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running (4; l in local, line: 7
+Running (4; l in math, line: 7
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running (4; l in math, line: 38
+Running (4; l in math, line: 38
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT m.MIN(4; l) in local, line: 7
+Running m.MIN(4; l) in local, line: 7
+Running l in local, line: 7
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 8
+Running 1 in local, line: 8
+Running 1 in local, line: 8
+Running PRINTL 1+a in local, line: 10
+Running 1+a in local, line: 10
+Running a in local, line: 10
+Running EXIT in local, line: 12
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MAIOR ENTRE -10 e 4" in local, line: 7
+Running PRINT m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MAIOR ENTRE -10 e 4" in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MAIOR ENTRE -10 e 4" in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MAIOR ENTRE -10 e 4" in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE: -10 e 4" in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running STORE int a 1 in local, line: 9
+Running 1 in local, line: 9
+Running 1 in local, line: 9
+Running PRINTL 1+a in local, line: 11
+Running 1+a in local, line: 11
+Running a in local, line: 11
+Running EXIT in local, line: 13
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running IMPORT math AS m in local, line: 3
+Running FUNCTION EXP a b in m, line: 1
+Running END EXP in m, line: 27
+Running FUNCTION MAX a b in m, line: 29
+Running END MAX in m, line: 35
+Running FUNCTION MIN a b in m, line: 37
+Running END MIN in m, line: 43
+Running FUNCTION NEG a in m, line: 45
+Running END NEG in m, line: 47
+Running EXPORT func EXP, MAX, MIN, NEG in m, line: 49
+Running STORE int l -10 in local, line: 6
+Running -10 in local, line: 6
+Running -10 in local, line: 6
+Running PRINT "MENOR ENTRE -10 e 4: " in local, line: 7
+Running PRINTL m.MIN(4; l) in local, line: 8
+Running m.MIN(4; l) in local, line: 8
+Running l in local, line: 8
+Running IF (GT a, b) in math, line: 38
+Running GT a, b in math, line: 38
+Running b in math, line: 38
+Running a in math, line: 38
+Running RETURN float b in math, line: 39
+Running b in math, line: 39
+Running PRINT "10 ELEVADO A 2: " in local, line: 9
+Running PRINTL m.EXP(10; 2) in local, line: 10
+Running m.EXP(10; 2) in local, line: 10

@@ -1,0 +1,33 @@
+ALLOC 4
+
+--> Condition doesn't matches
+IF 1 == 2
+PUSH 1
+
+--> Condition matches
+IF 1 == 1
+PUSH 3
+
+--> Closing inner IF
+ENDIF
+
+ELSE
+PUSH 2
+
+--> Condition matches
+IF 2 == 2
+PUSH 4
+
+--> Condition doesn't matches
+IF 3 == 5
+PUSH 6
+
+--> Closing all remaining IFs
+ENDIF
+ENDIF
+ENDIF
+
+
+PRINT.STACK
+
+EXIT

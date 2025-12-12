@@ -1,0 +1,49 @@
+FUNCTION EXP a b
+    IF (EQ b, 0)
+        RETURN int 1
+    ENDIF
+
+    IF (EQ b, 1)
+        RETURN float a
+    ENDIF
+    
+    IF (EQ b, -1)
+        RETURN float 1/a
+    ENDIF
+
+    IF (LT b, 0)
+        STORE float b b+1
+    ELSE
+        STORE float b b-1
+    ENDIF
+
+    STORE float matExp EXP(a; b)
+
+    IF (GT b, 0)
+        RETURN float a*matExp
+    ELSE
+        RETURN float matExp/a
+    ENDIF
+END EXP
+
+FUNCTION MAX a b
+    IF (GT a, b)
+        RETURN float a
+    ELSE
+        RETURN float b
+    ENDIF
+END MAX
+
+FUNCTION MIN a b
+    IF (GT a, b)
+        RETURN float b
+    ELSE
+        RETURN float a
+    ENDIF
+END MIN
+
+FUNCTION NEG a
+    RETURN float a*-1
+END NEG
+
+EXPORT func EXP, MAX, MIN, NEG

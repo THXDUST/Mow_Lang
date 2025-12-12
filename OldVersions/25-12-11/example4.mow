@@ -1,0 +1,40 @@
+STACK.ALLOC 2
+
+--> asks for 2 numbers
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "Please enter two numbers, it will multiply those two numbers"
+STACK.PUSH int READ int ""
+STACK.PUSH int READ int ""
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "-"
+
+--> do a * b
+STACK.PUSH float MUL STACK STACK
+
+--> should print the awnser
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "Result"
+STACK.PRINT
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "-"
+
+--> asks for another number
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "Please enter a number, it will divide the result above by the new number"
+STACK.PUSH int READ int ""
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "-"
+--> do a // b
+STACK.PUSH float DIV STACK STACK
+--> should print the result
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINT "Result"
+STACK.PRINT
+EXIT

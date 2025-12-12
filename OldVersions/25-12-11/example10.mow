@@ -1,0 +1,91 @@
+ALLOC 256
+--> Allocate memory before executing any commands
+
+PUSH 5
+PUSH 10
+ADD
+PRINT 0
+--> Should print 15 (5 + 10)
+
+PUSH 20
+PUSH 3
+SUB
+PRINT 0
+--> Should print 17 (20 - 3)
+
+PUSH 6
+PUSH 7
+MUL
+PRINT 0
+--> Should print 42 (6 * 7)
+
+PUSH 50
+PUSH 2
+DIV
+PRINT 0
+--> Should print 25 (50 / 2)
+
+PUSH 10
+PUSH 3
+MOD
+PRINT 0
+--> Should print 1 (10 % 3)
+
+PUSH 2
+PUSH 3
+EXP
+PRINT 0
+--> Should print 8 (2^3)
+
+STORE myVar
+--> Storing the last result (8) in variable "myVar"
+
+PRINT.VARS
+--> Should print: myVar = 8
+
+PUSH 100
+PUSH 200
+SWAP
+PRINT 0
+--> Should print 100 (after swap, top is 100)
+
+DUP
+PRINT 0
+--> Should print 100 (duplicate top value)
+
+PUSH 0
+PRINT "Pre skip"
+JUMP_EQ_0 L1
+PRINT "This won't be printed"
+EXIT
+
+L1:
+ADD
+PRINT "Jump successful!"
+
+PUSH 30
+PUSH 5
+JUMP_GT_0 L2
+PRINT "This won't be printed either"
+
+L2:
+PRINT "Jump greater than 0 successful!"
+
+RANDOM 1 100
+PRINT 0
+--> Should print a random number between 1 and 100
+
+TIME UTC FULL
+--> Print full date and time in UTC
+
+PRINT 0
+
+WAIT 2
+--> Pause execution for 2 seconds
+
+PRINT "Waited 2 seconds"
+
+CLEAR
+PRINT.STACK
+--> Should print "Stack: []" (stack is empty)
+EXIT

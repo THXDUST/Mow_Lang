@@ -1,0 +1,5 @@
+PRINTL("Before loop");
+FOR (INT i=0; i < 3; i = i + 1) {
+    PRINTL("In loop");
+}
+PRINTL("After loop");

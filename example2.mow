@@ -1,0 +1,13 @@
+STACK.ALLOC 2
+
+LABEL MAIN
+STACK.PUSH int READ int "Insert one number: "
+STACK.PUSH int READ int "Insert one number again: "
+STACK.PUSH int SUB STACK STACK
+JUMP EQ 0 END
+PRINT "not equal"
+EXIT
+
+LABEL END
+PRINT "equal"
+EXIT

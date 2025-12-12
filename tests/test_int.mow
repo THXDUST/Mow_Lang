@@ -1,0 +1,3 @@
+INT x = 5;
+x = 10;
+PRINTL(x);

@@ -1,0 +1,6 @@
+INT x = 0;
+PRINTL(x);
+x = x + 1;
+PRINTL(x);
+x = x + 1;
+PRINTL(x);

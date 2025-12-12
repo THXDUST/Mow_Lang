@@ -1,0 +1,15 @@
+--> #DEFINE NO_WARNS True
+
+IMPORT math AS m
+
+
+STORE int l -10
+PRINT "MENOR ENTRE -10 e 4: "
+PRINTL m.MIN(4; l)
+PRINT "10 ELEVADO A 2: "
+PRINTL m.EXP(10; 2)
+STORE int a 1
+
+PRINTL 1+a
+
+EXIT

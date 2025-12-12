@@ -1,0 +1,11 @@
+STACK.ALLOC 2
+
+STACK.PUSH int READ int "Insert one number: "
+STACK.PUSH int READ int "Insert one number again: "
+JUMP EQ STACK.POP, STACK.POP end
+PRINTL "not equal"
+EXIT
+
+LABEL end
+PRINTL "equal"
+EXIT

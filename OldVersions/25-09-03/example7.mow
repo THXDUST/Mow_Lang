@@ -1,0 +1,18 @@
+STACK.ALLOC 1
+
+--> Generates a random number between 0 and 100
+STACK.PUSH int RANDOM 
+PRINTL STACK.TOP
+STACK.CLEAR
+
+--> Generates a random number between 0 and 50
+STACK.PUSH int RANDOM 50
+PRINTL STACK.TOP
+STACK.CLEAR
+
+--> Generates a random number between 25 and 75
+STACK.PUSH int RANDOM 25, 75
+PRINTL STACK.TOP
+STACK.CLEAR
+
+EXIT

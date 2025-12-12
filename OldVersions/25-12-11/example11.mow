@@ -1,0 +1,35 @@
+ALLOC 8
+
+--> Pushes 2 strings into memory
+PUSH HELLO WORLD 1
+PUSH HELLO WORLD 2
+
+--> Stores the 2nd string
+STORE a
+
+--> Pushes 2 more strings into memory
+PUSH HELLO WORLD 3
+PUSH HELLO WORLD 4
+
+--> Stores the 2nd string
+STORE b
+
+--> Pushes 1 string and 1 integer into memory
+PUSH HELLO WORLD 5
+PUSH 102121
+
+--> Clear the memory
+CLEAR
+
+--> Prints the memory
+PRINT.STACK
+
+--> Waits 1.5 seconds
+WAIT 1.5
+
+--> Prints the 2 stored variables
+PRINT a
+PRINT b
+
+--> Exits the program
+EXIT

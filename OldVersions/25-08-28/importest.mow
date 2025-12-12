@@ -1,0 +1,38 @@
+STACK.ALLOC 4
+
+STACK.PUSH int 3
+STACK.PUSH int 7
+
+STACK.PUSH float ADD STACK, STACK
+PRINTL STACK.TOP
+STACK.PRINTALL
+STACK.PRINT
+
+STORE float resultado
+
+PRINTL.VARS
+
+
+PRINTL "Agora são:"
+PRINTL TIME.NOW %H:%M:%S
+
+PRINTL TIME.STAMP
+
+STACK.PUSH int 5
+STACK.PUSH int 2
+
+STACK.PUSH float EXP STACK, STACK
+PRINTL STACK.TOP
+
+STORE int x 10
+PRINTL STACK.TOP
+JUMP GT 5 ir_para_label
+PRINTL "Este print será pulado se x > 5"
+
+LABEL ir_para_label
+PRINTL "Chegou no label ir_para_label"
+
+STORE str MyVar "Hello, World!"
+STACK.PRINTALL
+
+EXIT

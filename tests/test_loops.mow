@@ -1,0 +1,35 @@
+// Test FOR loop with 3 parts
+PRINTL("Testing FOR loop (3 parts):");
+FOR (INT i=0; i < 5; i = i+1) {
+    PRINTL(i);
+}
+
+STR st = "Hello, World!";
+INT in = 10;
+FLOAT fl = 1.23;
+CHAR ch = 'a';
+LIST li = [1, 2, 3];
+BOOL bo = TRUE;
+DICT di = {"da": 1, "aaab": 2};
+
+// Test FOR with dict
+PRINTL("Testing FOR with dict:");
+FOR (CONST k, CONST v : di) {
+    PRINTL(k+": "+v);
+}
+
+// Test FOR with list
+PRINTL("Testing FOR with list:");
+FOR (CONST item : li) {
+    PRINTL(item);
+}
+
+// Test WHILE loop
+PRINTL("Testing WHILE loop:");
+INT x = 0;
+
+WHILE (x < 3) {
+    PRINTL(x);
+    x = x + 1;
+}
+PRINTL("Done");

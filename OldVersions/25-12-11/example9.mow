@@ -1,0 +1,26 @@
+ALLOC 7
+
+PRINT "Get the full time, but be careful and make sure you have allocated at least 7 bytes before."
+TIME FULL UTC
+
+PRINT.STACK
+CLEAR
+
+--> Insert hour, minute and second to the stack
+TIME HOUR MINUTE SECOND UTC
+PRINT.STACK
+
+--> Prints the time since the program started and pushes the result to the stack
+TIME.SINCE
+
+--> Waits 1 second
+WAIT 1
+
+TIME.SINCE
+
+PRINT.STACK
+
+--> Just cleaning before leaving...
+ALLOC.DESTROY
+
+EXIT

@@ -1,0 +1,38 @@
+STACK.ALLOC 3
+
+STACK.PUSH int 10
+
+FUNCTION SUM A B
+STACK.ALLOC 4
+STACK.PUSH int LOAD A
+STACK.PUSH int LOAD B
+STACK.PUSH int ADD STACK, STACK
+STACK.PRINT
+RETURN int STACK.TOP
+END SUM
+
+FUNCTION fibonacci a b
+    STACK.ALLOC 4
+    STACK.PUSH int LOAD a
+
+
+    JUMP GT 0 next
+
+
+
+
+    LABEL next
+
+
+    LABEL end
+    RETURN int fibonacci()
+
+
+END fibonacci
+
+
+
+PRINTL SUM(10, 2)
+PRINTL fibonacci(0, 10)
+
+EXIT

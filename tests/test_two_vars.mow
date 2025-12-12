@@ -1,0 +1,4 @@
+INT x = 5;
+INT y = 10;
+PRINTL(x);
+PRINTL(y);

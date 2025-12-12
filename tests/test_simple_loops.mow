@@ -1,0 +1,14 @@
+// Test simpler FOR loop
+PRINTL("Test 1:");
+FOR (INT i=0; i < 3; i++) {
+    PRINTL(i);
+}
+
+PRINTL("Test 2:");
+INT y = 0;
+WHILE (y < 2) {
+    PRINTL(y);
+    y = y + 1;
+}
+
+PRINTL("Done");

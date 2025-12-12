@@ -1,0 +1,102 @@
+STACK.ALLOC 13
+--> Allocate memory before executing any commands
+
+STACK.PUSH int 5
+STACK.PUSH int 10
+STACK.PUSH float ADD STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 15 (5 + 10)
+
+STACK.PUSH int 20
+STACK.PUSH int 3
+STACK.PUSH float SUB STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 17 (20 - 3)
+
+STACK.PUSH int 6
+STACK.PUSH int 7
+STACK.PUSH float MUL STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 42 (6 * 7)
+
+STACK.PUSH int 50
+STACK.PUSH int 2
+STACK.PUSH float DIV STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 25 (50 / 2)
+
+STACK.PUSH int 10
+STACK.PUSH int 3
+STACK.PUSH float MOD STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 1 (10 % 3)
+
+STACK.PUSH int 2
+STACK.PUSH int 3
+STACK.PUSH float EXP STACK.POP, STACK.POP
+PRINTL STACK.TOP
+--> Should print 8 (2^3)
+
+
+--> MAKE SURE TO SET THE RIGHT DATATYPE HERE
+STORE int myVar STACK.TOP
+
+--> Storing the last result (8) in variable "myVar"
+
+PRINTL.VARS
+--> Should print: myVar = 8
+
+STACK.PUSH int 100
+STACK.PUSH int 200
+STACK.SWAP
+PRINTL STACK.TOP
+--> Should print 100 (after swap, top is 100)
+
+STACK.DUP
+PRINTL STACK.TOP
+--> Should print 100 (duplicate top value)
+
+STACK.PUSH int 0
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINTL "Pre skip"
+JUMP EQ STACK.TOP, 0 L1
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINTL "This won't be printed"
+EXIT
+
+LABEL L1
+STACK.PUSH float ADD STACK.POP, STACK.POP
+
+--> MAKE SURE THE PRINT IS RIGHT HERE
+PRINTL "Jump successful!"
+
+STACK.PUSH int 30
+STACK.PUSH int 5
+JUMP GT STACK.TOP, 0 L2
+
+PRINTL "This won't be printed either"
+
+LABEL L2
+
+PRINTL "Jump greater than 0 successful!"
+
+STACK.PUSH int RANDOM 1, 100
+PRINTL STACK.TOP
+--> Should print a random number between 1 and 100
+
+STACK.PUSH str TIME.NOW GLOBAL %H:%M:%S.%f %m-%d-%Y
+--> Print full date and time in UTC
+
+PRINTL STACK.TOP
+
+TIME.SLEEP 2
+--> Pause execution for 2 seconds
+
+PRINTL "Waited 2 seconds"
+
+STACK.CLEAR
+STACK.PRINT
+--> Should print "[]" (stack is empty)
+EXIT

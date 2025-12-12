@@ -1,0 +1,28 @@
+STACK.ALLOC 2
+
+--> asks for 2 numbers
+PRINTL "Please enter two numbers, it will multiply those two numbers"
+STACK.PUSH int READ int ""
+STACK.PUSH int READ int ""
+PRINTL "-"
+
+--> do a * b
+STACK.PUSH float MUL STACK.POP, STACK.POP
+
+--> should print the awnser
+PRINTL "Result"
+STACK.PRINT
+PRINTL "-"
+
+--> asks for another number
+PRINTL "Please enter a number, it will divide the result above by the new number"
+STACK.PUSH int READ int ""
+PRINTL "-"
+
+--> do a // b
+STACK.PUSH float DIV STACK.POP, STACK.POP
+--> should print the result
+
+PRINTL "Result"
+STACK.PRINT
+EXIT

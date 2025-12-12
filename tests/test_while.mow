@@ -1,0 +1,7 @@
+PRINTL("Testing WHILE loop:");
+INT x = 0;
+WHILE (x < 3) {
+    PRINTL(x);
+    x = x + 1;
+}
+PRINTL("Done");

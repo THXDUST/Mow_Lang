@@ -1,0 +1,6 @@
+INT x = 5;
+PRINTL(x);
+PRINTL("Before assignment");
+x = 10;
+PRINTL("After assignment");
+PRINTL(x);
