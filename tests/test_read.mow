@@ -1,0 +1,3 @@
+PRINTL("Digite um numero:");
+INT n = INT(READ("insira numero: "));
+PRINTL("Voce digitou: " + n);

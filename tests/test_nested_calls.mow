@@ -1,0 +1,23 @@
+FUNCTION INT square(x: INT) {
+    RETURN(x * x);
+}
+
+FUNCTION INT add(a: INT, b: INT) {
+    RETURN(a + b);
+}
+
+FUNCTION INT complex_calc(x: INT, y: INT) {
+    RETURN(add(square(x), square(y)));
+}
+
+// Test nested function calls in expressions
+PRINTL(complex_calc(3, 4));  // Should be 9 + 16 = 25
+
+// Test multiple function calls
+INT a = square(5);
+INT b = add(10, 20);
+PRINTL(a);  // Should be 25
+PRINTL(b);  // Should be 30
+
+// Test function call result used in arithmetic
+PRINTL(add(square(2), square(3)));  // Should be 4 + 9 = 13

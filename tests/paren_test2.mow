@@ -1,0 +1,6 @@
+// Teste com parênteses simples
+INT result1 = (42).ABS();
+PRINTL(result1);
+
+INT result2 = (-99).ABS();
+PRINTL(result2);

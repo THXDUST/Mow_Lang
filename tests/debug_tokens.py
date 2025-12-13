@@ -2,8 +2,7 @@ import sys
 sys.path.insert(0, 'src')
 from mowlang import Tokenize
 
-code = """INT x = 5;
-x = 10;"""
+code = """[10, 20, 30].append(40);"""
 
 tokens = Tokenize(code)
 for i, t in enumerate(tokens):

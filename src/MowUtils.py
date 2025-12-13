@@ -1,17 +1,272 @@
 import codecs, re, os
+from copy import deepcopy
 from MowErrors import ThrowNameError, ThrowRuntimeError, ThrowNotImplementedError, ThrowSyntaxError, ThrowTypeError, ThrowValueError
 from MowTypes import Token, Variable, Function, Class, Label
+from MowMethods import BuiltInMethods
 
-datatypes = ["INT", "FLOAT", "STR", "BOOL", "LIST", "DICT", "CHAR", "VOID"]
+datatypes = ["VOID", "LIST", "DICT", "INT", "FLOAT", "BOOL", "STR", "CHAR"]
 
-keywords = ["PRINT", "PRINTL", "EXIT", "LABEL", "FUNCTION", "GOTO", "RETURN", "CLASS", "FOR", "WHILE", "BREAK", "CONTINUE", "BREAKPOINT"]
-#              0         1        2       3          4         5        6        7       8      9        10       11             12
+keywords = ["PRINT", "PRINTL", "EXIT", "LABEL", "FUNCTION", "GOTO", "RETURN", "CLASS", "FOR", "WHILE", "BREAK", "CONTINUE", "BREAKPOINT", "DEFINE", "READ"]
+#              0        1        2        3         4         5        6         7       8       9       10         11           12          13       14
 
 DEPTH = 0
+
+def CallFunction(func_name: str, args: list, token: Token, Globals: dict) -> any:
+    """
+    Helper to call a function from within EvalExpr and return result.
+    This is needed because we need proper state management.
+    """
+    if func_name not in Globals.get("FUNCTIONS", {}):
+        ThrowNameError(f"Function '{func_name}' not defined", token, Globals)
+    
+    func = Globals["FUNCTIONS"][func_name]
+    
+    # Save old state
+    old_globals_vars = deepcopy(Globals["VARIABLES"])
+    old_in_func = Globals.get("_in_function", False)
+    Globals["VARIABLES"] = {}
+    retval = None
+    restore_state = True  # Track whether we should restore state
+    
+    try:
+        # Set up parameters
+        for idx, p in enumerate(func.parameters):
+            pname = p.name
+            ptype = p.type or "*"
+            
+            if idx < len(args):
+                aval = args[idx]
+            else:
+                if hasattr(p, "default") and p.default is not None:
+                    aval = p.default
+                else:
+                    ThrowRuntimeError(f"Missing argument for parameter '{pname}'", token, Globals)
+            
+            SetVariable(Globals, pname, aval, False, ptype, token.line, token.char_pos, token)
+        
+        # Execute function body
+        body_tokens = func.body.copy()
+        body_tokens.append(Token("EOF", None, token.line, token.char_pos))
+        
+        Globals["_in_function"] = True
+        try:
+            # We need to call the Run function from mowlang
+            # But we have to be careful to use a fresh context
+            # Import here to avoid circular imports at module load time
+            import sys
+            if 'mowlang' in sys.modules:
+                mowlang = sys.modules['mowlang']
+                # Call Run with custom GLOBALS to use our modified dictionary
+                mowlang.Run(body_tokens, custom_GLOBALS=Globals)
+            else:
+                # Fallback if mowlang not yet loaded
+                from mowlang import Run
+                Run(body_tokens, custom_GLOBALS=Globals)
+        except Exception as exc:
+            # Check if it's a ReturnException
+            if type(exc).__name__ == "ReturnException":
+                retval = getattr(exc, 'value', None)
+                restore_state = True  # Still restore after function returns
+            else:
+                # Some other error - restore globals and re-raise
+                restore_state = True
+                raise
+    finally:
+        # Always restore globals after function execution
+        if restore_state:
+            Globals["VARIABLES"] = old_globals_vars
+            Globals["_in_function"] = old_in_func
+    
+    return retval
 
 def EvalExpr(Tokens: list[Token], Globals: dict, Lines: list[str]) -> any:
     if len(Tokens) == 0:
         return None
+    
+    # --- Pre-process: Handle function calls in expressions (e.g testB(6)) ---
+    # Build a new list to avoid modifying while iterating
+    new_tokens = []
+    i = 0
+    while i < len(Tokens):
+        # Check for function call pattern: identifier(...)
+        if (i < len(Tokens) - 1 and 
+            Tokens[i].type == "identifier" and 
+            Tokens[i + 1].type == "left_parenthesis" and
+            Tokens[i].aux in Globals.get("FUNCTIONS", {})):
+            
+            func_name_token = Tokens[i]
+            func_name = func_name_token.aux
+            i += 2  # Skip identifier and left_paren
+            
+            # Extract arguments until matching right_paren
+            args_tokens = []
+            paren_depth = 1
+            while i < len(Tokens) and paren_depth > 0:
+                if Tokens[i].type == "left_parenthesis":
+                    paren_depth += 1
+                    args_tokens.append(Tokens[i])
+                elif Tokens[i].type == "right_parenthesis":
+                    paren_depth -= 1
+                    if paren_depth > 0:
+                        args_tokens.append(Tokens[i])
+                else:
+                    args_tokens.append(Tokens[i])
+                i += 1
+            
+            # Parse arguments
+            args = []
+            if args_tokens:
+                current_arg = []
+                arg_depth = 0
+                for tok in args_tokens:
+                    if tok.type in ["left_parenthesis", "left_bracket", "left_key"]:
+                        arg_depth += 1
+                        current_arg.append(tok)
+                    elif tok.type in ["right_parenthesis", "right_bracket", "right_key"]:
+                        arg_depth -= 1
+                        current_arg.append(tok)
+                    elif tok.type == "comma" and arg_depth == 0:
+                        if current_arg:
+                            args.append(EvalExpr(current_arg, Globals, Lines))
+                        current_arg = []
+                    else:
+                        current_arg.append(tok)
+                if current_arg:
+                    args.append(EvalExpr(current_arg, Globals, Lines))
+            
+            # Call function
+            retval = CallFunction(func_name, args, func_name_token, Globals)
+            
+            # Add result token
+            if isinstance(retval, str):
+                new_tokens.append(Token("string_literal", retval, func_name_token.line, func_name_token.char_pos))
+            elif isinstance(retval, (int, float)):
+                new_tokens.append(Token("numeric_literal", retval, func_name_token.line, func_name_token.char_pos))
+            elif isinstance(retval, list):
+                new_tokens.append(Token("list_literal", retval, func_name_token.line, func_name_token.char_pos))
+            elif isinstance(retval, dict):
+                new_tokens.append(Token("dict_literal", retval, func_name_token.line, func_name_token.char_pos))
+            elif retval is None:
+                new_tokens.append(Token("empty", None, func_name_token.line, func_name_token.char_pos))
+            else:
+                new_tokens.append(Token("identifier", str(retval), func_name_token.line, func_name_token.char_pos, 0, retval))
+        else:
+            new_tokens.append(Tokens[i])
+            i += 1
+    
+    Tokens[:] = new_tokens  # Update original list in place
+    
+    # --- Pre-process: Handle method calls on literals/expressions ---
+    processed_any = True
+    while processed_any:
+        processed_any = False
+        i = 0
+        while i < len(Tokens) - 3:
+            can_have_method = False
+            base_start = i
+            base_end = i
+
+            if (Tokens[i].type in ["string_literal", "numeric_literal", "list_literal", "dict_literal", "identifier"] and
+                i + 1 < len(Tokens) and Tokens[i + 1].type == "dot"):
+                can_have_method = True
+                base_end = i
+                
+            elif Tokens[i].type == "left_parenthesis":
+                paren_depth = 1
+                j = i + 1
+                while j < len(Tokens) and paren_depth > 0:
+                    if Tokens[j].type == "left_parenthesis":
+                        paren_depth += 1
+                    elif Tokens[j].type == "right_parenthesis":
+                        paren_depth -= 1
+                    j += 1
+                
+                if (paren_depth == 0 and j < len(Tokens) and Tokens[j].type == "dot"):
+                    can_have_method = True
+                    base_end = j - 1
+            
+            if (can_have_method and base_end + 1 < len(Tokens) and Tokens[base_end + 1].type == "dot" and
+                base_end + 2 < len(Tokens) and Tokens[base_end + 2].type == "identifier" and
+                base_end + 3 < len(Tokens) and Tokens[base_end + 3].type == "left_parenthesis"):
+                
+                method_name = Tokens[base_end + 2].aux
+                paren_token = Tokens[base_end + 3]
+                
+                if Tokens[i].type == "left_parenthesis":
+                    expr_tokens = Tokens[i + 1:base_end]
+                    base_value = EvalExpr(expr_tokens, Globals, Lines)
+                    base_token = Tokens[i]
+                else:
+                    base_token = Tokens[i]
+                    if base_token.type == "identifier":
+                        if base_token.value in Globals["VARIABLES"]:
+                            base_value = Globals["VARIABLES"][base_token.value].value
+                        else:
+                            ThrowNameError(f"Variable '{base_token.value}' not defined", base_token, Globals)
+                    else:
+                        base_value = base_token.value
+                
+                args_tokens = []
+                j = base_end + 4
+                paren_depth = 1
+                while j < len(Tokens) and paren_depth > 0:
+                    if Tokens[j].type == "left_parenthesis":
+                        paren_depth += 1
+                        args_tokens.append(Tokens[j])
+                    elif Tokens[j].type == "right_parenthesis":
+                        paren_depth -= 1
+                        if paren_depth == 0:
+                            break
+                        args_tokens.append(Tokens[j])
+                    else:
+                        args_tokens.append(Tokens[j])
+                    j += 1
+                
+                args = []
+                if args_tokens:
+                    current_arg = []
+                    arg_depth = 0
+                    for tok in args_tokens:
+                        if tok.type in ["left_parenthesis", "left_bracket", "left_key"]:
+                            arg_depth += 1
+                            current_arg.append(tok)
+                        elif tok.type in ["right_parenthesis", "right_bracket", "right_key"]:
+                            arg_depth -= 1
+                            current_arg.append(tok)
+                        elif tok.type == "comma" and arg_depth == 0:
+                            if current_arg:
+                                args.append(EvalExpr(current_arg, Globals, Lines))
+                            current_arg = []
+                        else:
+                            current_arg.append(tok)
+                    if current_arg:
+                        args.append(EvalExpr(current_arg, Globals, Lines))
+                
+                result = BuiltInMethods.call_method(base_value, method_name, args, base_token, Globals)
+                
+                num_to_remove = j - i + 1
+                for _ in range(num_to_remove):
+                    if i < len(Tokens):
+                        Tokens.pop(i)
+                
+                # Insert result as new token
+                if isinstance(result, str):
+                    Tokens.insert(i, Token("string_literal", result, base_token.line, base_token.char_pos))
+                elif isinstance(result, (int, float)):
+                    Tokens.insert(i, Token("numeric_literal", result, base_token.line, base_token.char_pos))
+                elif isinstance(result, list):
+                    Tokens.insert(i, Token("list_literal", result, base_token.line, base_token.char_pos))
+                elif isinstance(result, dict):
+                    Tokens.insert(i, Token("dict_literal", result, base_token.line, base_token.char_pos))
+                elif result is None:
+                    Tokens.insert(i, Token("empty", None, base_token.line, base_token.char_pos))
+                else:
+                    Tokens.insert(i, Token("identifier", str(result), base_token.line, base_token.char_pos, 0, result))
+                
+                processed_any = True
+                break
+            
+            i += 1
     
     resolved_tokens = []
     i = 0
@@ -139,7 +394,45 @@ def EvalExpr(Tokens: list[Token], Globals: dict, Lines: list[str]) -> any:
 
         return result_dict
 
-    # --- Data type constructor syntax support: e.g. DICT(expr), LIST(expr) ---
+    if Tokens and Tokens[0].type == "keyword" and Tokens[0].aux == "READ":
+        p_idx = None
+        for idx, t in enumerate(Tokens[1:], start=1):
+            if t.type == "left_parenthesis":
+                p_idx = idx
+                break
+        if p_idx is not None:
+            depth = 0
+            q_idx = None
+            for j in range(p_idx, len(Tokens)):
+                tt = Tokens[j]
+                if tt.type == "left_parenthesis":
+                    depth += 1
+                elif tt.type == "right_parenthesis":
+                    depth -= 1
+                    if depth == 0:
+                        q_idx = j
+                        break
+            if q_idx is not None:
+                inner = Tokens[p_idx+1:q_idx]
+                if not inner:
+                    prompt = ""
+                else:
+                    try:
+                        prompt_val = EvalExpr(inner, Globals, Lines)
+                    except Exception as e:
+                        ThrowRuntimeError(str(e), Tokens[0], Globals)
+
+                    prompt, ok = Convert(prompt_val, "STR", True, Tokens[0].line, Tokens[0].char_pos, Globals, Tokens[0])
+                    if not ok:
+                        ThrowTypeError("READ prompt must be a string", Tokens[0], Globals)
+
+                try:
+                    res = input(prompt if prompt is not None else "")
+                except Exception as e:
+                    ThrowRuntimeError(f"Error reading input: {str(e)}", Tokens[0], Globals)
+
+                return res
+
     if Tokens and Tokens[0].type == "data_type":
         p_idx = None
         for idx, t in enumerate(Tokens[1:], start=1):
@@ -319,17 +612,15 @@ def EvalExpr(Tokens: list[Token], Globals: dict, Lines: list[str]) -> any:
 
     return stack[0]
 
-def ClearWhitespace(Tokens: list[Token], i: int) -> int:
-    if i < 0:
-        i = 0
+def ClearWhitespace(Tokens: list[Token]) -> list[Token]:
+    from copy import copy
+    tmpTokens:list[Token] = []
 
-    if i < len(Tokens) and Tokens[i].type == "whitespace":
-        i+=1
+    for t in Tokens:
+        if t.type != "whitespace":
+            tmpTokens.append(t)
 
-    while i < len(Tokens) and Tokens[i].type == "whitespace":
-        i+=1
-
-    return i
+    return tmpTokens
 
 def SetVariable(Globals: dict, Name: str, Value: any, IsConst: bool, Type: str, Line: int, CharPos: int, token: Token = Token("whitespace", " ", 1, 1, 0, "")):
     if Name in Globals["VARIABLES"]:
@@ -461,15 +752,6 @@ def Convert(value: any, target_type: str, error: bool, line: int, char_pos: int,
             return True, s[1:-1]
         return False, s
 
-    def parse_number_literal(s):
-        try:
-            n = float(s)
-            if n.is_integer():
-                return int(n), True, "int"
-            return n, True, "float"
-        except Exception:
-            return s, False, None
-
     if target_type.upper() in ("NULL", "NONE", "VOID"):
         if value is None:
             return None, True
@@ -517,20 +799,25 @@ def Convert(value: any, target_type: str, error: bool, line: int, char_pos: int,
                     ThrowTypeError(f"Cannot convert STRING literal to INT", token, globals)
                 return value, False
             else:
-                if globals and unq in globals.get("VARIABLES", {}):
-                    var_val = globals["VARIABLES"][unq].value
-                    if isinstance(var_val, int, float, str):
-                        try:
-                            if var_val == True: var_val = 1
-                            elif var_val == False: var_val = 0
-                            return int(var_val), True
-                        except ValueError:
-                            if isinstance(var_val, dict):
-                                ThrowTypeError(f"Cannot convert DICT to INT", token, globals)
-                            elif isinstance(var_val, list):
-                                ThrowTypeError(f"Cannot convert LIST to INT", token, globals)
-                            else:
-                                ThrowTypeError(f"Cannot convert NULL to INT")
+                # try to parse plain string input (e.g., from READ())
+                try:
+                    return int(unq), True
+                except Exception:
+                    # fallback: treat as variable name lookup
+                    if globals and unq in globals.get("VARIABLES", {}):
+                        var_val = globals["VARIABLES"][unq].value
+                        if isinstance(var_val, (int, float, str)):
+                            try:
+                                if var_val == True: var_val = 1
+                                elif var_val == False: var_val = 0
+                                return int(var_val), True
+                            except ValueError:
+                                if isinstance(var_val, dict):
+                                    ThrowTypeError(f"Cannot convert DICT to INT", token, globals)
+                                elif isinstance(var_val, list):
+                                    ThrowTypeError(f"Cannot convert LIST to INT", token, globals)
+                                else:
+                                    ThrowTypeError(f"Cannot convert NULL to INT")
                 if error:
                     ThrowTypeError(f"Cannot convert STRING to INT", token, globals)
                 return value, False
@@ -679,7 +966,11 @@ def Convert(value: any, target_type: str, error: bool, line: int, char_pos: int,
         return value, True
 
     if target_type == "*":
-        return value, True
+        for data in datatypes:
+            v, s = Convert(value, data, error, 0, 0, globals, token)
+            if s:
+                return v, s
+        return value, False
 
     if error:
         ThrowTypeError(f"Unsupported target type: {target_type}", token, globals)

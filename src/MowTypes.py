@@ -1,3 +1,5 @@
+import warnings
+
 class NotNull:
     value: str = "NotNull"
 
@@ -12,6 +14,9 @@ class FunctionParam:
         self.name = name
         self.type = type
         self.default = default
+    
+    def __repr__(self):
+        return f"({self.name}: {self.type}{f' = {self.default}' if self.default != NotNull() and self.default != None else ''})"
 
 class Function:
     def __init__(self, name:str, parameters:list[FunctionParam], body:list, data_type: str, static:bool = False):
@@ -51,10 +56,14 @@ class Token:
     
     def __str__(self):
         return f"Token(Val: {self.value}\t\tType: {self.type}\tAuxVal: {self.aux}\t(l: {self.line}, c: {self.char_pos}, z: {self.depth}))"
-    
+
 class Stack:
     def __init__(self, Hash_Size: int, Line: int, Globals: dict, Token: Token):
         from MowErrors import ThrowNameError, ThrowValueError, ThrowTypeError, ThrowNotImplementedError, ThrowRuntimeError, ThrowSyntaxError
+        from MowDebug import MowLangWarning
+
+        if not Globals["VARIABLES"]["StackDeprecationNoWarnings"].value:
+            MowLangWarning("Stack is pending deprecation, consider using regular variables instead. If you don't want to see this warning anymore use 'DEFINE StackDeprecationNoWarning TRUE' to silence this warning", Token, Globals["FILE"], Globals["LINES"])
 
         if Hash_Size == 0:
             ThrowRuntimeError("Cannot start Stack with hash size of 0", Token, Globals)
@@ -111,7 +120,7 @@ class Stack:
         from MowErrors import ThrowRuntimeError
 
         try:
-            self.buf[self.pointer-1], self.buf[self.pointer] = self.buf[self.pointer], self.buf[self.pointer]
+            self.buf[self.pointer], self.buf[self.pointer-1] = self.buf[self.pointer-1], self.buf[self.pointer]
         except IndexError:
             ThrowRuntimeError("Cannot swap value in Stack filled with none of 1 value", Token, Globals)
         except Exception as e:

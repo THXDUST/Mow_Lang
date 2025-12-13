@@ -1,34 +1,19 @@
-#DEFINE REQUIRE_VERSION 0.0.1 -F
-#DEFINE NO_VERSION_WARNS
-#DEFINE INPUT_PROMPT "-> "
+DEFINE InputPrompt "-> ";
 
-IMPORT importest.mow
+LIST Stack = [];   // Stack substitute
 
-STACK.ALLOC 20
+Stack = Stack.APPEND(2);
+Stack = Stack.APPEND(Stack.POP()-1); // Silly trick to substitute 'STACK.PUSH SUB STACK 1'
 
+FUNCTION INT testA(b: INT) {
+    RETURN(b+1);
+}
 
-STACK.PUSH int 2
---> STACK.PUSH SUB STACK 1
+FUNCTION INT testB(a: INT) {
+    RETURN(testA(a));
+}
 
-FUNCTION testa B
-    STACK.ALLOC 2
-    RETURN int ADD LOAD B, 1
-END testa
+PRINTL("\n\n--------------");
+PRINTL(testB(6));
 
-
-FUNCTION test A
-    STACK.ALLOC 4
-
-
-    RETURN int testa(LOAD A)
-
-END test
-
-
-PRINTL "\n\n--------------"
-PRINTL test(6)
-
-
-
-
-EXIT
+EXIT();

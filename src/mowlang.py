@@ -65,6 +65,10 @@ class ReturnException(Exception):
         super().__init__("Function return")
         self.value = value
 
+def DefineDefaultVariables():
+    MI.SetVariable(GLOBALS, "StackDeprecationNoWarnings", True, False, "BOOL", 1, 1)
+    MI.SetVariable(GLOBALS, "InputPrompt", "", False, "STR", 1, 1)
+
 def OpenFile(filePath:str) -> str:
     GLOBALS["FILE"] = MI.os.path.abspath(filePath)
     temp = open(filePath, 'r').read()
@@ -148,7 +152,7 @@ def Tokenize(FILE:str):
                     tmpTokens.append(MI.Validate(buffer, line, char_pos - len(buffer), GLOBALS, GLOBALS["LINES"], DEPTH))
                     buffer = ""
                 tmpTokens.append(MI.Validate(ch, line, char_pos, GLOBALS, GLOBALS["LINES"], DEPTH))
-            elif ch.isalnum():
+            elif ch.isalnum() or ch == '_':
                 buffer += ch
             elif ch == '.':
                 try:
@@ -185,22 +189,19 @@ def Tokenize(FILE:str):
 
     return tmpTokens
 
-def Run(Tokens: list[MI.Token] = []):
-    global MAKE_CONST, VAR_TYPE, CURRENT_TOKEN, DEPTH
-    i = -1
+def Run(Tokens: list[MI.Token] = [], custom_GLOBALS: dict = None):
+    global MAKE_CONST, VAR_TYPE, CURRENT_TOKEN, DEPTH, GLOBALS
+    
+    # Use custom GLOBALS if provided (for function execution context)
+    if custom_GLOBALS is not None:
+        GLOBALS = custom_GLOBALS
+    
+    i = 0
 
     while i < len(Tokens):
-        i = MI.ClearWhitespace(Tokens, i)
-        if i >= len(Tokens):
-            break
-
         token = Tokens[i]
         CURRENT_TOKEN = token
         i+=1
-
-        i = MI.ClearWhitespace(Tokens, i)
-        if i >= len(Tokens):
-            break
         
         if token.type == "EOF" and DEPTH == 0:
             break
@@ -233,7 +234,6 @@ def Run(Tokens: list[MI.Token] = []):
                     result = str(MI.EvalExpr(expr_tokens, GLOBALS, GLOBALS["LINES"])) if expr_tokens else ""
                     print(MI.codecs.decode(result, 'unicode_escape'), end='\n' if nxt_line else '')
                     try:
-                        i = MI.ClearWhitespace(Tokens, i)
                         semicolon_token = Tokens[i]
                         if semicolon_token.type != "semicolon":
                             MI.ThrowSyntaxError("Expected ';' after PRINT statement", token2, GLOBALS)
@@ -243,26 +243,20 @@ def Run(Tokens: list[MI.Token] = []):
                     MI.ThrowSyntaxError("Expected '(' after PRINT", token, GLOBALS)
                 continue
 
-            elif token.aux == keywords[2]:  # EXIT
+            elif token.aux == keywords[2]:   # EXIT
                 next_token = Tokens[i]
                 i+=1
 
                 if next_token.type == "left_parenthesis":
                     try:
-                        i = MI.ClearWhitespace(Tokens, i)
-                        if i >= len(Tokens):
-                            break
-
                         next_token2 = Tokens[i]
                         i+=1
+
                         if next_token2.type == "numeric_literal":
                             expr = [next_token2]
                             depth = 0
-                            while i < len(Tokens):
-                                i = MI.ClearWhitespace(Tokens, i)
-                                if i >= len(Tokens):
-                                    break
 
+                            while i < len(Tokens):
                                 next_token3 = Tokens[i]
                                 i+=1
                                 if next_token3.type == "left_parenthesis":
@@ -292,10 +286,6 @@ def Run(Tokens: list[MI.Token] = []):
                             MI.ThrowTypeError("Expected numeric literal or integer variable for EXIT code", next_token2, GLOBALS)
 
                         try:
-                            i = MI.ClearWhitespace(Tokens, i)
-                            if i >= len(Tokens):
-                                break
-
                             next_token3 = Tokens[i]
                             if next_token3.type == "right_parenthesis":
                                 MI.MowLangQuit("Program exited succesfully.", exit_code, GLOBALS, next_token3.line, next_token3.char_pos)
@@ -313,21 +303,13 @@ def Run(Tokens: list[MI.Token] = []):
                     MI.ThrowSyntaxError("Expected '(' after EXIT", next_token, GLOBALS)
                     continue
 
-            elif token.aux == keywords[3]: # LABEL
+            elif token.aux == keywords[3]:   # LABEL
                 next_token: MI.Token = Tokens[i]
                 i+=1
-
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
 
                 if next_token.type == "left_parenthesis":
                     expr: list[MI.Token] = []
                     while i < len(Tokens):
-                        i = MI.ClearWhitespace(Tokens, i)
-                        if i >= len(Tokens):
-                            break
-
                         next_token2: MI.Token = Tokens[i]
                         i+=1
 
@@ -347,10 +329,6 @@ def Run(Tokens: list[MI.Token] = []):
                             if tr in [bool, int, float, dict, list]:
                                 MI.ThrowTypeError(f"Cannot use {'BOOL' if tr == bool else ('INT' if tr == float else ('FLOAT' if tr == float else ('DICT' if tr == dict else 'LIST')))} to name LABELS", next_token, GLOBALS)
 
-                            i = MI.ClearWhitespace(Tokens, i)
-                            if i >= len(Tokens):
-                                break
-
                             next_token3 = Tokens[i]
                             i+=1
 
@@ -365,31 +343,22 @@ def Run(Tokens: list[MI.Token] = []):
                 else:
                     MI.ThrowSyntaxError("Expected '(' after LABEL statement", next_token, GLOBALS)
 
-            elif token.aux == keywords[4]:  # FUNCTION
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
-
+            elif token.aux == keywords[4]:   # FUNCTION
                 ret_type = "VOID"
                 is_const = False
                 if Tokens[i].type == "data_type":
                     ret_type = Tokens[i].aux
                     i += 1
-                    i = MI.ClearWhitespace(Tokens, i)
 
                 if i < len(Tokens) and Tokens[i].type == "const":
                     is_const = True
                     i += 1
-                    i = MI.ClearWhitespace(Tokens, i)
-
-                if i >= len(Tokens):
-                    break
+            
                 name_tok: MI.Token = Tokens[i]
                 i += 1
                 if name_tok.type != "identifier":
                     MI.ThrowSyntaxError("Expected function name after FUNCTION (and optional type/CONST)", name_tok, GLOBALS)
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens) or Tokens[i].type != "left_parenthesis":
                     MI.ThrowSyntaxError("Expected '(' after function name", Tokens[i] if i < len(Tokens) else name_tok, GLOBALS)
                 i += 1
@@ -452,9 +421,6 @@ def Run(Tokens: list[MI.Token] = []):
                         if t.type != "whitespace":
                             param_buf.append(t)
 
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
                 body_start = Tokens[i]
                 i += 1
                 if body_start.type != "left_key":
@@ -471,34 +437,17 @@ def Run(Tokens: list[MI.Token] = []):
                 GLOBALS["FUNCTIONS"][name_tok.aux] = MI.Function(name_tok.aux, params, body_tokens, ret_type, is_const)
                 continue
 
-            elif token.aux == keywords[5]: # GOTO
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
-
+            elif token.aux == keywords[5]:   # GOTO
                 next_token = Tokens[i]
                 i+=1
-
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
 
                 if next_token.type != "left_parenthesis":
                     MI.ThrowSyntaxError("Expected '(' after GOTO statement", next_token, GLOBALS)
 
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
-
-
                 expr: list[MI.Token] = []
                 while i < len(Tokens):
                     next_token2 = Tokens[i]
-
                     i+=1
-                    i = MI.ClearWhitespace(Tokens, i)
-                    if i >= len(Tokens):
-                        break
 
                     if next_token2.type == "right_parenthesis" and next_token2.depth == next_token.depth:
                         if not expr:
@@ -519,11 +468,7 @@ def Run(Tokens: list[MI.Token] = []):
                     MI.ThrowRuntimeError(str(e), next_token2, GLOBALS)
                 finally:
                     next_token3 = Tokens[i]
-
                     i+=1
-                    i = MI.ClearWhitespace(Tokens, i)
-                    if i >= len(Tokens):
-                        break
 
                     if next_token3.type != "semicolon":
                         MI.ThrowSyntaxError("Expected ';' after GOTO statement", next_token2, GLOBALS)
@@ -531,11 +476,7 @@ def Run(Tokens: list[MI.Token] = []):
                     i = i2
                     continue
             
-            elif token.aux == keywords[6]:  # RETURN
-                i = MI.ClearWhitespace(Tokens, i)
-                if i >= len(Tokens):
-                    break
-
+            elif token.aux == keywords[6]:   # RETURN
                 next_token = Tokens[i]
                 i += 1
 
@@ -555,7 +496,6 @@ def Run(Tokens: list[MI.Token] = []):
                 else:
                     result = None
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected ';' after RETURN", Tokens[i-1] if i-1 < len(Tokens) else next_token, GLOBALS)
                 sem_tok = Tokens[i]
@@ -568,8 +508,7 @@ def Run(Tokens: list[MI.Token] = []):
 
                 raise ReturnException(result)
 
-            elif token.aux == keywords[7]: # CLASS
-                i = MI.ClearWhitespace(Tokens, i)
+            elif token.aux == keywords[7]:   # CLASS
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected class name", token, GLOBALS)
 
@@ -581,7 +520,6 @@ def Run(Tokens: list[MI.Token] = []):
                 
                 class_name = class_name_token.aux
                 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected '{' after class name", class_name_token, GLOBALS)
 
@@ -617,7 +555,6 @@ def Run(Tokens: list[MI.Token] = []):
                 
                 j = 0
                 while j < len(class_body_tokens):
-                    j = MI.ClearWhitespace(class_body_tokens, j)
                     if j >= len(class_body_tokens):
                         break
                         
@@ -625,7 +562,6 @@ def Run(Tokens: list[MI.Token] = []):
                     j += 1
                     
                     if member_token.type == "keyword" and member_token.aux == "FUNCTION":
-                        j = MI.ClearWhitespace(class_body_tokens, j)
                         if j >= len(class_body_tokens):
                             break
                             
@@ -635,7 +571,6 @@ def Run(Tokens: list[MI.Token] = []):
                         if j < len(class_body_tokens) and class_body_tokens[j].type == "data_type":
                             ret_type = class_body_tokens[j].aux
                             j += 1
-                            j = MI.ClearWhitespace(class_body_tokens, j)
                         
                         if j >= len(class_body_tokens) or class_body_tokens[j].type != "identifier":
                             MI.ThrowSyntaxError("Expected method name", 
@@ -715,7 +650,6 @@ def Run(Tokens: list[MI.Token] = []):
                                 if t.type != "whitespace":
                                     param_buf.append(t)
                         
-                        j = MI.ClearWhitespace(class_body_tokens, j)
                         if j >= len(class_body_tokens):
                             MI.ThrowSyntaxError("Expected '{' to start method body", 
                                             class_body_tokens[j-1] if j > 0 else param_start, GLOBALS)
@@ -753,7 +687,6 @@ def Run(Tokens: list[MI.Token] = []):
                     elif member_token.type == "data_type":
                         prop_type = member_token.aux
                         
-                        j = MI.ClearWhitespace(class_body_tokens, j)
                         if j >= len(class_body_tokens):
                             MI.ThrowSyntaxError("Expected property name", member_token, GLOBALS)
                         
@@ -766,11 +699,9 @@ def Run(Tokens: list[MI.Token] = []):
                         prop_name = prop_name_token.aux
                         is_const = False
                         
-                        j = MI.ClearWhitespace(class_body_tokens, j)
                         if j < len(class_body_tokens) and class_body_tokens[j].type == "const":
                             is_const = True
                             j += 1
-                            j = MI.ClearWhitespace(class_body_tokens, j)
                         
                         if j < len(class_body_tokens) and class_body_tokens[j].type == "assignment_operator":
                             j += 1
@@ -789,27 +720,22 @@ def Run(Tokens: list[MI.Token] = []):
                     
                     elif member_token.type == "semicolon":
                         continue
-                    else:
-                        #MI.ThrowSyntaxError(f"Unexpected token in class body: {member_token.type}", member_token, GLOBALS)
-                        j = MI.ClearWhitespace(class_body_tokens, j)
                         
                 new_class = MI.Class(class_name, methods, properties, None)
                 GLOBALS["CLASSES"][class_name] = new_class
                 
                 continue
 
-            elif token.aux == keywords[8]:
+            elif token.aux == keywords[8]:   # FOR
                 # FOR (once; condition; always) --> FOR (INT i=0; i < 100; i++)
                 # FOR (item : list iterable) --> FOR (const item : LIST([1, 2, 3, "apple", "pie"]))
                 # FOR (key, item : dict iterable) --> FOR (const k, const v : DICT({"Key": "Value"}))
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected '(' after FOR", token, GLOBALS)
 
                 next_token = Tokens[i]
                 i += 1
-                i = MI.ClearWhitespace(Tokens, i)
                 if next_token.type != "left_parenthesis":
                     MI.ThrowSyntaxError("Expected '(' after FOR", next_token, GLOBALS)
 
@@ -821,13 +747,11 @@ def Run(Tokens: list[MI.Token] = []):
                         break
                     expr_tokens.append(t)
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected '{' after FOR(...)", token, GLOBALS)
 
                 body_start = Tokens[i]
                 i += 1
-                i = MI.ClearWhitespace(Tokens, i)
                 if body_start.type != "left_key":
                     MI.ThrowSyntaxError("Expected '{' after FOR(...)", body_start, GLOBALS)
 
@@ -859,15 +783,13 @@ def Run(Tokens: list[MI.Token] = []):
                     MI.ThrowSyntaxError("Ambiguous or invalid FOR syntax", token, GLOBALS)
                 continue
 
-            elif token.aux == keywords[9]:  # WHILE
+            elif token.aux == keywords[9]:   # WHILE
                 # WHILE (condition) { body }
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected '(' after WHILE", token, GLOBALS)
 
                 next_token = Tokens[i]
                 i += 1
-                i = MI.ClearWhitespace(Tokens, i)
                 if next_token.type != "left_parenthesis":
                     MI.ThrowSyntaxError("Expected '(' after WHILE", next_token, GLOBALS)
 
@@ -879,13 +801,11 @@ def Run(Tokens: list[MI.Token] = []):
                         break
                     condition_tokens.append(t)
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected '{' after WHILE(...)", token, GLOBALS)
 
                 body_start = Tokens[i]
                 i += 1
-                i = MI.ClearWhitespace(Tokens, i)
                 if body_start.type != "left_key":
                     MI.ThrowSyntaxError("Expected '{' after WHILE(...)", body_start, GLOBALS)
 
@@ -915,32 +835,97 @@ def Run(Tokens: list[MI.Token] = []):
             elif token.aux == keywords[11]:  # CONTINUE
                 raise MI.ContinueException()
 
-            elif token.aux == keywords[12]: # BREAKPOINT
+            elif token.aux == keywords[12]:  # BREAKPOINT
                 if DEBUG:
-                    i = MI.ClearWhitespace(Tokens, i)
                     if i >= len(Tokens):
                         MI.ThrowSyntaxError("Expected parenthesis '('", token, GLOBALS)
                     
                     next_token = Tokens[i]
                     i+=1
-                    i = MI.ClearWhitespace(Tokens, i)
                     if next_token.type != 'left_parenthesis':
                         MI.ThrowSyntaxError("Expected parenthesis '('", next_token, GLOBALS)
                     
                     next_token = Tokens[i]
                     i+=1
-                    i = MI.ClearWhitespace(Tokens, i)
                     if next_token.type != 'right_parenthesis':
                         MI.ThrowSyntaxError("BREAKPOINT takes no parameters but 1 was provided", next_token, GLOBALS)
 
                     next_token = Tokens[i]
                     i+=1
-                    i = MI.ClearWhitespace(Tokens, i)
                     if next_token.type != 'semicolon':
                         MI.ThrowSyntaxError("Expected semicolon ';'", next_token, GLOBALS)
 
                     MI.TriggerBreakpoint(token, GLOBALS)
                 continue
+
+            elif token.aux == keywords[13]:  # DEFINE
+                if i >= len(Tokens):
+                    MI.ThrowSyntaxError("Expected identifier after DEFINE command", token, GLOBALS)
+
+                name = Tokens[i]
+                i+=1
+                if name.type != "identifier":
+                    MI.ThrowSyntaxError("Expected identifier after DEFINE command", token, GLOBALS)
+                elif i >= len(Tokens):
+                    MI.ThrowSyntaxError("Expected value after identifier", token, GLOBALS)
+                
+                value = Tokens[i]
+                i+=1
+
+                value, s = MI.Convert(value.value, '*', False, token.line, token.char_pos, GLOBALS)
+                MI.SetVariable(GLOBALS, name.value, value, False, type(value).__name__.upper(), token.line, token.char_pos, token)
+                continue
+
+            elif token.aux == keywords[14]:
+                if i >= len(Tokens):
+                    MI.ThrowSyntaxError("Expected '(' after READ", token, GLOBALS)
+
+                left_paren = Tokens[i]
+                i += 1
+                if left_paren.type != "left_parenthesis":
+                    MI.ThrowSyntaxError("Expected '(' after READ", left_paren, GLOBALS)
+
+                expr = []
+                depth = 0
+                while i < len(Tokens):
+                    t = Tokens[i]
+                    i += 1
+                    if t.type == "left_parenthesis":
+                        depth += 1
+                        expr.append(t)
+                    elif t.type == "right_parenthesis":
+                        if depth == 0:
+                            break
+                        depth -= 1
+                        expr.append(t)
+                    else:
+                        expr.append(t)
+
+                if expr:
+                    try:
+                        prompt_val = MI.EvalExpr(expr, GLOBALS, GLOBALS["LINES"])
+                    except Exception as e:
+                        MI.ThrowRuntimeError(str(e), left_paren, GLOBALS)
+                    prompt, ok = MI.Convert(prompt_val, "STR", True, left_paren.line, left_paren.char_pos, GLOBALS, left_paren)
+                    if not ok:
+                        MI.ThrowTypeError("READ prompt must be a string", left_paren, GLOBALS)
+                else:
+                    prompt = ""
+
+                try:
+                    input(prompt if prompt is not None else "")
+                except Exception as e:
+                    MI.ThrowRuntimeError(f"Error reading input: {str(e)}", left_paren, GLOBALS)
+
+                if i >= len(Tokens):
+                    MI.ThrowSyntaxError("Expected ';' after READ", left_paren, GLOBALS)
+                sem_tok = Tokens[i]
+                i += 1
+                if sem_tok.type != "semicolon":
+                    MI.ThrowSyntaxError("Expected ';' after READ", sem_tok, GLOBALS)
+
+                continue
+
 
         elif token.type == "const":
             MAKE_CONST = True
@@ -951,7 +936,6 @@ def Run(Tokens: list[MI.Token] = []):
             continue
 
         elif token.type == "identifier":
-            i = MI.ClearWhitespace(Tokens, i)
             if i >= len(Tokens):
                 break
 
@@ -963,7 +947,6 @@ def Run(Tokens: list[MI.Token] = []):
                 val: any = None
                 
                 while i < len(Tokens):
-                    i = MI.ClearWhitespace(Tokens, i)
                     if i >= len(Tokens):
                         break
 
@@ -1032,7 +1015,6 @@ def Run(Tokens: list[MI.Token] = []):
                                 else:
                                     args_values.append(MI.EvalExpr(ae, GLOBALS, GLOBALS["LINES"]))
 
-                            old_vars = GLOBALS["VARIABLES"].copy()
                             old_globals_vars = GLOBALS["VARIABLES"]
                             GLOBALS["VARIABLES"] = {}
                             old_in_func = GLOBALS.get("_in_function", False)
@@ -1198,7 +1180,6 @@ def Run(Tokens: list[MI.Token] = []):
                 else:
                     retval = None
 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected ';' after function call", token, GLOBALS)
                 sem_tok = Tokens[i]
@@ -1214,7 +1195,6 @@ def Run(Tokens: list[MI.Token] = []):
                 class_name = token.aux
                 class_def = GLOBALS["CLASSES"][class_name]
                 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected identifier for instance name", token, GLOBALS)
                 
@@ -1225,7 +1205,6 @@ def Run(Tokens: list[MI.Token] = []):
                 
                 instance_name = instance_name_token.aux
                 
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     MI.ThrowSyntaxError("Expected ';' after instance declaration", instance_name_token, GLOBALS)
                 
@@ -1242,9 +1221,6 @@ def Run(Tokens: list[MI.Token] = []):
 
             elif token.type == "identifier" and token.aux in GLOBALS["VARIABLES"]:
                 var = GLOBALS["VARIABLES"][token.aux]
-                #MI.PrintDict(935, GLOBALS, 0, ["LINES", "FILE"])
-                
-                i = MI.ClearWhitespace(Tokens, i)
                 if i >= len(Tokens):
                     break
 
@@ -1252,7 +1228,6 @@ def Run(Tokens: list[MI.Token] = []):
                 i += 1
                 
                 if next_token.type == "dot":
-                    i = MI.ClearWhitespace(Tokens, i)
                     if i >= len(Tokens):
                         MI.ThrowSyntaxError("Expected member name after '.'", next_token, GLOBALS)
                     
@@ -1264,7 +1239,6 @@ def Run(Tokens: list[MI.Token] = []):
                     
                     member_name = member_token.aux
                     
-                    i = MI.ClearWhitespace(Tokens, i)
                     if i >= len(Tokens):
                         MI.ThrowSyntaxError("Expected '(' for method call or ';' for property access", 
                                         member_token, GLOBALS)
@@ -1361,7 +1335,6 @@ def Run(Tokens: list[MI.Token] = []):
                             else:
                                 retval = None
                             
-                            i = MI.ClearWhitespace(Tokens, i)
                             if i >= len(Tokens):
                                 MI.ThrowSyntaxError("Expected ';' after method call", token, GLOBALS)
                             
@@ -1383,7 +1356,6 @@ def Run(Tokens: list[MI.Token] = []):
                         if hasattr(var.value, 'attributes') and member_name in var.value.attributes:
                             expr = []
                             while i < len(Tokens):
-                                i = MI.ClearWhitespace(Tokens, i)
                                 if i >= len(Tokens):
                                     break
                                 
@@ -1420,7 +1392,6 @@ def Run(Tokens: list[MI.Token] = []):
                     val: any = None
                     
                     while i < len(Tokens):
-                        i = MI.ClearWhitespace(Tokens, i)
                         if i >= len(Tokens):
                             break
 
@@ -1602,6 +1573,7 @@ def ConsoleMode():
 
 def Main():
     global LINES, CURRENT_TOKEN, GLOBALS
+    DefineDefaultVariables()
     if len(GLOBALS["FILE_PATHS"]) < 1:
         ConsoleMode()
         quit(0)
@@ -1612,6 +1584,7 @@ def Main():
             LINES = FILE.splitlines()
             GLOBALS["LINES"] = LINES
             Tokens = Tokenize(FILE)
+            Tokens = MI.ClearWhitespace(Tokens)
             Run(Tokens)
     except KeyboardInterrupt:
         MI.ThrowKeyboardInterruptError("Keyboard forced interruption.", CURRENT_TOKEN, GLOBALS)

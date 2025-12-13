@@ -1,0 +1,4 @@
+INT negNum = -42;
+PRINTL("Variable negative: " + negNum.ABS());
+
+PRINTL("Parenthesis negative: " + (42).ABS());

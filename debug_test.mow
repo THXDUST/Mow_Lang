@@ -1,0 +1,2 @@
+// Teste com parênteses simples
+(42).ABS();

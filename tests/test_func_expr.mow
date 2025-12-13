@@ -1,0 +1,5 @@
+FUNCTION INT add(a: INT, b: INT) {
+    RETURN(a + b);
+}
+
+PRINTL(add(3, 5));

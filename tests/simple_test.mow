@@ -1,0 +1,9 @@
+// Teste simples de métodos
+STR text = "hello";
+PRINTL(text.UPPER());
+
+INT num = 42;
+PRINTL(num.ABS());
+
+LIST arr = [1, 2, 3];
+PRINTL(arr.LENGTH());

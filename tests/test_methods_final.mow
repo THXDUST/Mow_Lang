@@ -1,0 +1,55 @@
+PRINTL("===== STRINGS TESTS =====");
+STR msg = "hello world";
+PRINTL("Original: " + msg);
+PRINTL("Upper: " + msg.UPPER());
+PRINTL("Lower: " + msg.LOWER());
+PRINTL("Length: " + msg.LENGTH());
+PRINTL("Reversed: " + msg.REVERSE());
+PRINTL("Starts with 'hello': " + msg.STARTSWITH("hello"));
+PRINTL("Ends with 'world': " + msg.ENDSWITH("world"));
+PRINTL("Contains 'world': " + msg.CONTAINS("world"));
+PRINTL("Replace 'world' with 'MowLang': " + msg.REPLACE("world", "MowLang"));
+
+// ===== TESTES COM LISTAS =====
+PRINTL("");
+PRINTL("===== TESTES COM LISTAS =====");
+LIST myList = [1, 2, 3, 4, 5];
+PRINTL("Original list LENGTH: " + myList.LENGTH());
+myList.APPEND(6);
+PRINTL("After APPEND(6), LENGTH: " + myList.LENGTH());
+PRINTL("Contains 3: " + myList.CONTAINS(3));
+PRINTL("Count of 3: " + myList.COUNT(3));
+PRINTL("Index of 3: " + myList.INDEX(3));
+
+// ===== TESTES COM DICIONARIOS =====
+PRINTL("");
+PRINTL("===== TESTES COM DICIONARIOS =====");
+DICT person = {"name": "João", "age": "25", "city": "São Paulo"};
+PRINTL("Dict LENGTH: " + person.LENGTH());
+PRINTL("Contains 'name': " + person.CONTAINS("name"));
+
+// ===== TESTES COM INTEIROS =====
+PRINTL("");
+PRINTL("===== TESTES COM INTEIROS =====");
+INT num = 42;
+INT absVal = (-42).ABS();
+PRINTL("Absolute value of -42: " + absVal);
+INT hexNum = 255;
+STR hexVal = (hexNum).TO_HEX();
+PRINTL("Hex of 255: " + hexVal);
+INT binNum = 8;
+STR binVal = (binNum).TO_BIN();
+PRINTL("Bin of 8: " + binVal);
+
+// ===== TESTES COM FLOATS =====
+PRINTL("");
+PRINTL("===== TESTES COM FLOATS =====");
+FLOAT val = 3.14159;
+PRINTL("Value: " + val);
+FLOAT absFloat = (-3.14).ABS();
+PRINTL("Abs of -3.14: " + absFloat);
+FLOAT rounded = val.ROUND(2);
+PRINTL("Rounded: " + rounded);
+
+PRINTL("");
+PRINTL("===== TESTES COMPLETADOS COM SUCESSO! =====");

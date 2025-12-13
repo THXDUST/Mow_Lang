@@ -3,20 +3,23 @@ from colorama import Fore, init
 from MowTypes import Token
 
 init(autoreset=True)
-
-class MowLangWarning(Warning):
-    def __init__(self, message):
-        self.message = message
     
-    def __str__(self):
-        return f"MowLangWarning: {self.message}"
+def MowLangWarning(Message:str, Token:Token, Filepath:str, Lines:list[str]=[' ']):
+    print(Fore.YELLOW + f"""
+        <---------- Warning ---------->
+         MowLang File: "{Filepath}", Line {Token.line}, Char {Token.char_pos}:
+         |{Lines[Token.line-1].strip()}|
+{" "*(Token.char_pos+9-(len(Lines[Token.line-1])-len(Lines[Token.line-1].strip()))) + "^" * max(1, len(Token.aux) if Token.type != "EOF" else 1)}
 
-def MowLangError(Message:str, Token:Token=Token("", "", 1, 1), FilePath:str="", Lines:list[str]=[], QuitWithMessage:bool=True):
+         Warning: {Message}
+        <----------------------------->""")
+
+def MowLangError(Message:str, Token:Token=Token("", "", 1, 1), FilePath:str="", Lines:list[str]=[' '], QuitWithMessage:bool=True):
     if QuitWithMessage:
         try:
             print(Fore.LIGHTRED_EX + f"""\n
         <---------- ERROR REPORT ---------->
-         MowLang File: "{FilePath}", line {Token.line}, char {Token.char_pos}:
+         MowLang File: "{FilePath}", Line {Token.line}, Char {Token.char_pos}:
          |{Lines[Token.line-1].strip()}|
 {" "*(Token.char_pos+9-(len(Lines[Token.line-1])-len(Lines[Token.line-1].strip()))) + "^" * max(1, len(Token.aux) if Token.type != "EOF" else 1)}
 
@@ -33,15 +36,7 @@ def MowLangError(Message:str, Token:Token=Token("", "", 1, 1), FilePath:str="", 
             {Message}
 
             Error occured while generating
-            the report
-
-            Look in your code for syntax
-            errors
-
-            OR
-
-            Error happened somewhere near
-            a number value
+            the report.
         <---------------------------------->\n""")
             
         quit()

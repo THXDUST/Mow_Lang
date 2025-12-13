@@ -1,0 +1,7 @@
+FUNCTION INT multiply(a: INT, b: INT) {
+    RETURN(a * b);
+}
+
+INT result = multiply(4, 5);
+PRINTL(result);
+PRINTL(multiply(3, 7));

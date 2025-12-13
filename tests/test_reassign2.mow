@@ -1,6 +1,3 @@
-INT x = 5;
-PRINTL(x);
-PRINTL("Before assignment");
-x = 10;
-PRINTL("After assignment");
-PRINTL(x);
+LIST l = [10, 20, 40];
+l = l.APPEND(12);
+PRINTL();
