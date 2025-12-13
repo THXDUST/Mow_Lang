@@ -1,6 +1,7 @@
 
 from colorama import Fore, init
 from MowTypes import Token
+import sys
 
 init(autoreset=True)
     
@@ -39,7 +40,7 @@ def MowLangError(Message:str, Token:Token=Token("", "", 1, 1), FilePath:str="", 
             the report.
         <---------------------------------->\n""")
             
-        quit()
+        sys.exit(1)
     return False
 
 def MowLangQuit(Message:str, ExitCode:int=0, Globals:dict={}, Line: int=1, CharPos: int = 1):
@@ -53,4 +54,4 @@ def MowLangQuit(Message:str, ExitCode:int=0, Globals:dict={}, Line: int=1, CharP
      {Message}
      Program Left With Exit Code: {ExitCode}
     <------------------------>\n""")
-    quit()
+    sys.exit(0)
